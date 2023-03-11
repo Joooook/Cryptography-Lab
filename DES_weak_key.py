@@ -57,14 +57,12 @@ def parity_check(key):
             return False
         k=k>>8
     return True
-
 def add_parity(key):
     list=[]
     for i in range(256):
         check=key
         for j in range(8):
             check=check | ((i>>(7-j))&1)<<((7-j)*8)
-            print(bin(check))
         if parity_check(check):
             list.append(check)
     return list
@@ -96,8 +94,9 @@ if __name__ == '__main__':
         halfWeakKey.append(key)
 
     weakKey=[]
-    for i in halfWeakKey:       #组合两半弱密钥
+    for i in halfWeakKey:       #组合两半 弱密钥
         for j in halfWeakKey:
             weakKey.append(i+j)
-    for i in weakKey:
-        print(inv_replace(int(''.join(i),2),PC_1,64))
+    weakKeyWithParity = []
+    #以下是半弱密钥推导
+    #半弱密钥在密钥Round中只产生两种密钥，假设第i轮和第j轮的密钥是相同的，推导所有可能
