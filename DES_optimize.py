@@ -171,5 +171,5 @@ if __name__ == '__main__':
     s = int(input(), 16)
     key = int(input(), 16)
     for i in range(T):
-        s = DES_decrypt(s, key)
+        s = DES_encrypt(s, key)
     print('0x' + hex(s)[2:].rjust(16, '0'))
