@@ -84,19 +84,37 @@ if __name__ == '__main__':
             if sum not in sameList:
                 sameList.append(sum)
     sameList.sort()         #找出相同的
-
     halfWeakKey=[]
     for i in range(2):          #求出一半的弱密钥
         key=['2']*28
         for j in range(28):
             if j in sameList:
                 key[j] =str(i)
-        halfWeakKey.append(key)
-
+        halfWeakKey.append(''.join(key))
     weakKey=[]
     for i in halfWeakKey:       #组合两半 弱密钥
         for j in halfWeakKey:
             weakKey.append(i+j)
     weakKeyWithParity = []
+    for i in weakKey:
+        weakKeyWithParity.append(add_parity(inv_replace(int(i,2),PC_1,64)))
     #以下是半弱密钥推导
     #半弱密钥在密钥Round中只产生两种密钥，假设第i轮和第j轮的密钥是相同的，推导所有可能
+    #invshift是shift表格的逆方向
+    INV_SHIFT = [1,2,2,2,2,2,2,1,2,2,2,2,2,2,1,1]
+    #k1和k2分别为正负密钥
+    k1Place=[i for i in range(28)]
+    k2Place = [i for i in range(28)]
+    count1=29
+    count2=0
+    for i in range(len(SHIFT)):
+        count1-=SHIFT[i]
+        count2+=SHIFT[i]
+        shift1=[]
+        shift2=[]
+        for j in range(28):
+            shift1.append((k1Place[j]+count1)%28)
+            shift2.append((k2Place[j]+count2)%28)
+        print(shift1)
+        print(shift2)
+        print()
