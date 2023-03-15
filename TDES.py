@@ -174,7 +174,7 @@ def TDES_decrypt(data, k1, k2):
     return DES_decrypt(DES_encrypt(DES_decrypt(data, k1), k2), k1)
 
 
-if __name__ == '__main__':
+def main():
     s = int(input(), 16)
     k1 = int(input(), 16)
     k2 = int(input(), 16)
@@ -185,3 +185,5 @@ if __name__ == '__main__':
     elif op == 1:
         s = TDES_encrypt(s, k1, k2)
         print('0x' + hex(s)[2:].rjust(16, '0'))
+if __name__ == '__main__':
+    main()

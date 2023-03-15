@@ -166,7 +166,7 @@ def DES_decrypt(data, key):
     return cdata
 
 
-if __name__ == '__main__':
+def main():
     T = int(input())
     s = int(input(), 16)
     key = int(input(), 16)
@@ -179,3 +179,5 @@ if __name__ == '__main__':
         for i in range(T):
             s = DES_encrypt(s, key)
         print('0x' + hex(s)[2:].rjust(16, '0'))
+if __name__ == '__main__':
+    main()

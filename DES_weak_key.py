@@ -99,7 +99,7 @@ def add_parity_even(key):
     return check
 
 
-if __name__ == '__main__':
+def main():
     # 要让subkey一样，由于置换具有可逆性，所以在置换前就需要保持相等
     # 也就是说，每次shift都要相等
     #

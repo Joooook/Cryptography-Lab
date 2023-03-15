@@ -3,6 +3,8 @@ def head_output(s):
         s = s.replace("%", "\\mod ")
     if '_' in s:
         s = s.replace("_", "\\_")
+    if '&' in s:
+        s = s.replace("&", "\\&")
     if '**' in s:
         s = s.replace("**", "^")
     if '!=' in s:
