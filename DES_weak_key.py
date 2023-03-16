@@ -158,7 +158,6 @@ def main():
             for k in k3Place[i]:
                 if k in k3Place[j]:
                     k3Place[i] = list(set(k3Place[i] + k3Place[j]))
-    #print(k3Place)
     #找出了所有相同的index，下面进行生成
     halfSemiWeakKey=[]
     for i in range(4):
