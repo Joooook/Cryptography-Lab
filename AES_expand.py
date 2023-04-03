@@ -227,7 +227,7 @@ def AES_decrypt(m, key, Nr, Nk):
     return matrix_to_bytes(data)
 
 
-if __name__ == '__main__':
+def main():
     length=int(input())
     T = int(input())
     s = int(input(), 16)
@@ -249,3 +249,4 @@ if __name__ == '__main__':
         for i in range(T):
             m=AES_decrypt(m, k, Nr, Nk)
         print('0x' + hex(m)[2:].rjust(32, '0'))
+main()

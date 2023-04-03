@@ -99,40 +99,51 @@ def SM4_decrypt(data, key):
         m = m << 32 | i
     return m
 
-def CBC(key,op,s,IV):
-    s_list=[]
-    for i in range(len(s)//16):
-        s_list.append(int(''.join(s[i*16:(i+1)*16]),16))
-    if op == 0:
-        pre=IV
-        for i in s_list[:-1]:
-            m = SM4_decrypt(i, key)^pre
-            pre=i
-            string=hex(m)[2:].rjust(32, '0')
-            for j in re.findall(r'.{2}', string):
-                print('0x'+j,end=' ')
+def CFB_decrypt(key,s,IV,n):
+    s_list = []
+    remain = len(s) % n
+    for i in range(len(s) // n):
+        s_list.append(int(''.join(s[i * n:(i + 1) * n]), 16))
+    if len(s) % n != 0:
+        s_list.append(int(''.join(s[(len(s) // n) * n:]), 16))
+    out = []
+    vec = IV
+    for i in s_list[:-1]:
+        m = (SM4_encrypt(vec, key) >> (16 - n) * 8) ^ i & int('FF' * n, 16)
+        out += re.findall(r'.{2}', hex(m)[2:].rjust(n * 2, '0'))
+        vec = (vec << n * 8 | i) & 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    if remain==0:
+        remain=n
+    m = (SM4_encrypt(vec, key) >> (16 - remain) * 8) ^ s_list[-1] & int('FF' * remain, 16)
+    out += re.findall(r'.{2}', hex(m)[2:].rjust(remain * 2, '0'))
+    for i in range(len(out)):
+        print('0x' + out[i], end=' ')
+        if i % 16 == 15:
             print()
-        m = SM4_decrypt(s_list[-1], key)^pre
-        string = hex(m)[2:].rjust(32, '0')
-        padding = int(string[-2:], 16)
-        string = string[:-2 * padding]
-        for j in re.findall(r'.{2}', string):
-            print('0x' + j, end=' ')
-        print()
-    elif op == 1:
-        s_list.append(
-            int(''.join(s[(len(s) // 16) * 16:]) + (16 - len(s) % 16) * hex(16 - len(s) % 16)[2:].rjust(2, '0'), 16))
-        c=IV
-        for i in s_list:
-            c = SM4_encrypt(i^c, key)
-            string = hex(c)[2:].rjust(32, '0')
-            for j in re.findall(r'.{2}', string):
-                print('0x' + j, end=' ')
+def CFB_encrypt(key,s,IV,n):
+    s_list = []
+    remain=(len(s)-1)%n +1
+    for i in range(len(s) // n):
+        s_list.append(int(''.join(s[i * n:(i + 1) * n]), 16))
+    if len(s)%n!=0:
+        s_list.append(int(''.join(s[(len(s)//n) * n:]), 16))
+    out=[]
+    vec=IV
+    for i in s_list[:-1]:
+        c=(SM4_encrypt(vec, key)>>(16-n)*8)^i & int('FF'*n,16)
+        out+=re.findall(r'.{2}',hex(c)[2:].rjust(n*2,'0'))
+        vec=(vec<<n*8 | c) & 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    c = (SM4_encrypt(vec, key) >> (16 - remain) * 8) ^ s_list[-1] & int('FF' * remain, 16)
+    out+=re.findall(r'.{2}',hex(c)[2:].rjust(remain*2,'0'))
+    for i in range(len(out)):
+        print('0x'+out[i],end=' ')
+        if i%16==15:
             print()
     return
 
 
 def main():
+    n = int(input())
     key = int(input(), 16)
     IV= int(input(), 16)
     op = int(input())
@@ -143,7 +154,10 @@ def main():
             break
         s+=line
     s=list(map(lambda x: x[2:],s))
-    CFB_encrypt(key,s,IV)
+    if op==0:
+        CFB_decrypt(key,s,IV,n)
+    elif op==1:
+        CFB_encrypt(key, s, IV,n)
 
 if __name__ == '__main__':
     main()
