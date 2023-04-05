@@ -9,6 +9,12 @@ def head_output(s):
         s = s.replace("**", "^")
     if '!=' in s:
         s = s.replace("!=", "\\neq")
+    if '*' in s:
+        s = s.replace("*", "\times")
+    if '^' in s:
+        s = s.replace("^", "\oplus")
+    if 'self.' in s:
+        s = s.replace("self.", "")
     if 'for' in s:
         if 'range' in s:
             return s[:s.find('for')] + '\For{$' + s[s.find('for') + 3:s.find('in')] + '=0\\text{ to }' + s[s.find(

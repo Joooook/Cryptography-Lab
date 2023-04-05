@@ -3,18 +3,18 @@ from pycallgraph import PyCallGraph
 from pycallgraph.output import GraphvizOutput
 from pycallgraph import GlobbingFilter
 import os
-import AES_expand
+import SM4_CFB
 
-FILE_LIST=['AES_expand']
+FILE_LIST=['SM4_CFB']
 
 if __name__ == '__main__':
     config = Config()
     graphviz = GraphvizOutput()
     config.trace_filter = GlobbingFilter(include=[
-        'AES_expand.*'
+        'SM4_CFB.*'
     ])
     for i in FILE_LIST:
         graphviz.output_file = 'graph\\'+i+'.png'
         with PyCallGraph(output=graphviz, config=config):
-            getattr( AES_expand, 'main')()
+            getattr( SM4_CFB, 'main')()
 

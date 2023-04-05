@@ -1,5 +1,6 @@
 import re
 import sys
+import time
 
 FK = [0xA3B1BAC6, 0x56AA3350, 0x677D9197, 0xB27022DC]
 
@@ -75,15 +76,21 @@ def init_data(data):
 
 
 def SM4_encrypt(data, key):
+    ts=time.perf_counter()
     c = 0
     key_list = key_expension(key)
     X = init_data(data)
     for i in range(32):
         k = key_list[i]
+        ets = time.perf_counter()
         X = round(X, k)
+        ees = time.perf_counter()
+    print(ees-ets)
     X.reverse()
     for i in X:
         c = c << 32 | i
+    es=time.perf_counter()
+    print(es-ts)
     return c
 
 
