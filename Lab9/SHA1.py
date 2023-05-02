@@ -1,6 +1,5 @@
 import math
 
-
 def sha1_f(x,y,z,r):
     if r<20:
         res=(x & y)|(~x & z)
@@ -59,6 +58,6 @@ def sha1(M):#字节流输入
     return digest
 def main():
     m=input().encode()
-    print(hashlib.sha1(m).hexdigest())
+    print(sha1(m))
 if __name__ == '__main__':
     main()

@@ -3,18 +3,18 @@ from pycallgraph import PyCallGraph
 from pycallgraph.output import GraphvizOutput
 from pycallgraph import GlobbingFilter
 import os
-import SM4_CFB
+from Lab9 import SM3
 
-FILE_LIST=['SM4_CFB']
+FILE_LIST=['SM3']
 
 if __name__ == '__main__':
     config = Config()
     graphviz = GraphvizOutput()
     config.trace_filter = GlobbingFilter(include=[
-        'SM4_CFB.*'
+        'SM3.*'
     ])
     for i in FILE_LIST:
         graphviz.output_file = 'graph\\'+i+'.png'
         with PyCallGraph(output=graphviz, config=config):
-            getattr( SM4_CFB, 'main')()
+            getattr(SM3, 'main')()
 
