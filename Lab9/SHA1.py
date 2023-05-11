@@ -17,6 +17,7 @@ def sha1_padding(M):
         pad_text+=b'\x00'
     EM=pad_text+int.to_bytes(init_len,8,'big')
     return EM
+
 def S(M,n):#32bit cycle_shift
     res=((M<<n)|(M>>(32-n)))&0xFFFFFFFF
     return res
