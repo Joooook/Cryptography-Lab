@@ -9,9 +9,10 @@ def sub(a, b):
     return a ^ b
 
 
-def mod(a, poly):
-    if a & 0x100 == 0x100:
-        a = sub(a, poly)
+def mod(a, N):
+    k = 1 << len(bin(N)[2:])-1
+    if a & k == k:
+        a = sub(a, N)
     a &= 0xff
     return a
 
@@ -22,7 +23,7 @@ def mul(a, b):
         if b & 0x01 == 0x01:
             ans = add(ans, a)
         a = a << 1
-        a = mod(a, poly=0x11b)  # poly是给定多项式
+        a = mod(a, N=0x11b)  # poly是给定多项式
         b = b >> 1
     return ans
 
@@ -32,7 +33,7 @@ def div(a, b):
     ans = 0
     la = len(bin(a)[2:])
     lb = len(bin(b)[2:])
-    while a >= b:
+    while a>=b:
         rec = la - lb
         a = a ^ (b << rec)
         ans = ans | (1 << rec)
@@ -40,21 +41,39 @@ def div(a, b):
     r = sub(t, mul(ans, b))
     return ans, r
 
+
+def Egcd(c, d, poly):
+    a=c
+    b=d
+    s0 = 1
+    s1 = 0
+    t0 = 0
+    t1 = 1
+    q, _ = div(a, b)
+    while sub(a, mul(q, b)) != 0:
+        gcd = sub(a, mul(q, b))
+        a = b
+        b = gcd
+        x = sub(s0, mul(s1, q))
+        s0 = s1
+        s1 = x
+        y = sub(t0, mul(t1, q))
+        t0 = t1
+        t1 = y
+        q, _ = div(a, b)
+    gcd = b
+    return x, y, gcd
+
 def main():
-    a, op, b = input().split()
+    a, b = input().split()
     a = int(a, 16)
     b = int(b, 16)
-    if op == '+':
-        print('%02x' % add(a, b))
-    elif op == '-':
-        print('%02x' % sub(a, b))
-    elif op == '*':
-        print('%02x' % mul(a, b))
-    elif op == '/':
-        print('%02x %02x' % div(a, b))
+    poly = 0x11b
+    print('%02x %02x %02x' % Egcd(a, b, poly))
 if __name__ == '__main__':
     config = Config()
     graphviz = GraphvizOutput()
-    graphviz.output_file = 'graph/gfield_arithmetic.py.png'
+    graphviz.output_file = '../graph/gfield_egcd.py.png'
     with PyCallGraph(output=graphviz, config=config):
         main()
+

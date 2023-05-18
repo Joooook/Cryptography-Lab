@@ -47,6 +47,6 @@ def main():
 if __name__ == '__main__':
     config = Config()
     graphviz = GraphvizOutput()
-    graphviz.output_file = 'graph/miller_rabin.py.png'
+    graphviz.output_file = '../graph/miller_rabin.py.png'
     with PyCallGraph(output=graphviz, config=config):
         main()

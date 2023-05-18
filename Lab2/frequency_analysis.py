@@ -30,7 +30,7 @@ def score(freq_list):
 if __name__ == '__main__':
     #EXPECTED_LIST.sort()
     freq_list = [0] * 26
-    file = open("test.txt", 'r')
+    file = open("../test.txt", 'r')
     try:
         lines = file.readlines()
     finally:
